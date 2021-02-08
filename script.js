@@ -1,5 +1,4 @@
 const video = document.querySelector('#video');
-// let bossGlasses = null;
 
 Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
@@ -10,8 +9,6 @@ async function startVideo() {
     let stream = null;
     try {
         stream = await navigator.mediaDevices.getUserMedia({
-            //Make sure to type widht and video here, I spent two days trying to fix a coordinates offset 
-            //between the mouth Landmarks coordinates and the Dom body coordinates, and these lines solved my problem:
             video: true
         });
         video.srcObject = stream;
@@ -34,39 +31,9 @@ video.addEventListener('playing', () => {
                 return;
             };
             const resizedDetections = faceapi.resizeResults(detections, displaySize);
-//         //finf eyes and eyebrows landmarks
-//         const leftEye = await detections.landmarks.getLeftEye();
-//         const rightEye = await detections.landmarks.getRightEye();
-//         const leftEyeBrow = await detections.landmarks.getLeftEyeBrow();
-//         const rightEyeBrow = await detections.landmarks.getRightEyeBrow();
-//         const jawline = await detections.landmarks.getJawOutline();
-                
-//         if(bossGlasses) {
-//             console.log('like a boss');
-//             bossGlasses.remove();
-//         }
-        
-//         //Calculate Rotation Angle for bossGlasses
-//         const adjacent = leftEye[0].x - rightEye[3].x;
-//         const opposite = leftEye[0].y - rightEye[3].y;
-//         const angleTang = opposite / adjacent;
-//         const angleDegrees = Math.atan(angleTang) * (180 / Math.PI);
 
-//         bossGlasses = document.createElement('img');
-//         bossGlasses.src = "images/bossglasses.png"; 
-//         bossGlasses.style.cssText = `
-//             position: absolute;
-//             width: calc(${jawline[16].x}px - ${jawline[0].x}px);
-//             transform: rotate(${angleDegrees}deg);
-//             left: ${jawline[0].x}px;
-//             top: ${leftEyeBrow[0].y}px;                   
-//         `;
-//         document.body.appendChild(bossGlasses);
-//         //console.log(bossGlasses);
-                   
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
 
-//         //Comment lines below if you don't want to see face box and face landmarks
             faceapi.draw.drawDetections(canvas, resizedDetections);
             faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
      }, 100);    
